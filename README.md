@@ -1,5 +1,168 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Application Name
 
+## System Requirements
+- PHP Version: 8.2.12
+- Database: pgsql 
+- Framework: Laravel 11.36.1
+
+## Access Credentials
+
+
+### Development Environment
+```txt
+URL: http://localhost:8000
+```
+
+| Role    | Username          | Password    |
+|---------|------------------|-------------|
+| admin   | admin@example.com | password   |
+| approver   | approver@example.com  | password   |
+| approver   | approver2@example.com  | password   |
+
+### Database Configuration
+using supabase 
+```txt
+DB_CONNECTION=pgsql
+DB_HOST=ursupabasehost
+DB_PORT=0000
+DB_DATABASE=postgres
+DB_USERNAME=postgres.usernamecode 
+DB_PASSWORD=dbpassword
+```
+
+## Installation Guide
+
+1. **Clone Repository**
+```bash
+git clone https://github.com/Etherlyvan/CarBook.git
+```
+
+2. **Install Dependencies**
+```bash
+composer install
+npm install
+```
+
+3. **Environment Setup**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+4. **Database Setup**
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+5. **Start Development Server**
+```bash
+php artisan serve
+npm run dev
+```
+
+## Application Features
+
+### Admin Panel
+1. Dashboard
+   - View statistics
+   - Monitor activities
+   - Generate reports
+
+2. Booking Management
+   - Create/Delete Booking
+   - Assign Approver
+
+
+3. History
+   - See Recent Approval 
+
+### Approver Panel
+1. Booking Approve
+   - Booking Approval
+   - Booking Rejection
+
+## API Documentation
+
+### Authentication
+```txt
+Endpoint: /api/login
+Method: POST
+Headers: Accept: application/json
+```
+
+Example request:
+```json
+{
+    "email": "user@email.com",
+    "password": "password123"
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+1. **Installation Error**
+   ```bash
+   composer install --ignore-platform-reqs
+   ```
+
+2. **Database Connection Error**
+   - Check database credentials
+   - Ensure database service is running
+
+3. **Permission Issues**
+   ```bash
+   chmod -R 775 storage bootstrap/cache
+   ```
+
+## Deployment Guide
+
+1. **Production Server Setup**
+```bash
+composer install --optimize-autoloader --no-dev
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+2. **Environment Configuration**
+   - Update .env for production
+   - Set APP_ENV=production
+   - Set APP_DEBUG=false
+
+## Updates and Maintenance
+
+### Version History
+- v1.0.0 (2024-01-01)
+  - Initial release
+  - Basic features implemented
+
+- v1.1.0 (2024-02-01)
+  - Added new features
+  - Bug fixes
+
+### Backup Procedure
+1. Database Backup
+```bash
+php artisan backup:run
+```
+
+2. File Backup
+```bash
+# Backup storage directory
+tar -czf backup.tar.gz storage/
+```
+
+## Support Contact
+
+- Technical Support: support@email.com
+- Emergency Contact: +62 123 4567 890
+- Working Hours: Monday-Friday (9:00-17:00 WIB)
+
+## License
+This application is licensed under the [MIT License](LICENSE).
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
