@@ -19,7 +19,8 @@ graph TD;
     L -->|Reject| N[Update Booking Status to Rejected]
     M --> O[Notify Admin]
     N --> O[Notify Admin]
-    O --> P[End]```
+    O --> P[End]
+```
 ## System Requirements
 - PHP Version: 8.2.12
 - Database: pgsql 
