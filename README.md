@@ -2,7 +2,6 @@
 #CarBook
 
 ## Physical Data Model
-## Physical Data Model
 
 ```mermaid
 erDiagram
