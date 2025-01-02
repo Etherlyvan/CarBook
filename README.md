@@ -1,5 +1,67 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-# CarBook
+#CarBook
+
+## Physical Data Model
+## Physical Data Model
+
+```mermaid
+erDiagram
+    USERS {
+        int id PK
+        string name
+        string email unique
+        string password
+        enum role ['admin', 'approver']
+        timestamps
+    }
+    
+    VEHICLES {
+        int id PK
+        string name
+        string type
+        boolean is_company_owned
+        float fuel_consumption
+        date last_service_date nullable
+        timestamps
+    }
+    
+    BOOKINGS {
+        int id PK
+        int vehicle_id FK
+        string requested_by
+        int approver_level_1 FK nullable
+        string status_level_1 default 'pending'
+        int approver_level_2 FK nullable
+        string status_level_2 default 'pending'
+        date start_date
+        date end_date
+        text reason
+        timestamps
+    }
+    
+    LOGS {
+        int id PK
+        int user_id FK
+        string action
+        timestamps
+    }
+    
+    BOOKING_HISTORIES {
+        int id PK
+        int vehicle_id FK
+        int booking_id FK
+        int duration
+        timestamps
+    }
+    
+    USERS ||--o{ BOOKINGS : "creates"
+    USERS ||--o{ LOGS : "performs"
+    USERS ||--o{ BOOKINGS : "approves"
+    VEHICLES ||--o{ BOOKINGS : "is booked"
+    BOOKINGS ||--o{ BOOKING_HISTORIES : "has"
+```
+
+
 ## Activity Diagram for Vehicle Booking
 
 ```mermaid
