@@ -1,5 +1,25 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-# Application Name
+# CarBook
+## Activity Diagram for Vehicle Booking
+
+```mermaid
+graph TD;
+    A[Start] --> B[Admin Login]
+    B --> C[Display Booking Form]
+    C --> D[Admin Fills Booking Form]
+    D --> E[Save Booking Request]
+    E --> F[Notify Approver Level 1]
+    F --> G[Approver Level 1 Reviews Request]
+    G --> H{Approve/Reject Request}
+    H -->|Approve| I[Notify Approver Level 2]
+    H -->|Reject| J[Update Booking Status to Rejected]
+    I --> K[Approver Level 2 Reviews Request]
+    K --> L{Approve/Reject Request}
+    L -->|Approve| M[Update Booking Status to Approved]
+    L -->|Reject| N[Update Booking Status to Rejected]
+    M --> O[Notify Admin]
+    N --> O[Notify Admin]
+    O --> P[End]
 
 ## System Requirements
 - PHP Version: 8.2.12
