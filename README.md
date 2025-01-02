@@ -11,7 +11,8 @@ erDiagram
         string email unique
         string password
         string role
-        timestamps
+        datetime created_at
+        datetime updated_at
     }
     
     VEHICLES {
@@ -21,7 +22,8 @@ erDiagram
         boolean is_company_owned
         float fuel_consumption
         date last_service_date nullable
-        timestamps
+        datetime created_at
+        datetime updated_at
     }
     
     BOOKINGS {
@@ -35,14 +37,16 @@ erDiagram
         date start_date
         date end_date
         text reason
-        timestamps
+        datetime created_at
+        datetime updated_at
     }
     
     LOGS {
         int id PK
         int user_id FK
         string action
-        timestamps
+        datetime created_at
+        datetime updated_at
     }
     
     BOOKING_HISTORIES {
@@ -50,7 +54,8 @@ erDiagram
         int vehicle_id FK
         int booking_id FK
         int duration
-        timestamps
+        datetime created_at
+        datetime updated_at
     }
     
     USERS ||--o{ BOOKINGS : "creates"
