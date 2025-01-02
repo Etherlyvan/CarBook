@@ -5,64 +5,55 @@
 
 ```mermaid
 erDiagram
+    USERS ||--o{ BOOKINGS : creates
+    USERS ||--o{ LOGS : performs
+    USERS ||--o{ BOOKINGS : approves
+    VEHICLES ||--o{ BOOKINGS : "is booked"
+    BOOKINGS ||--o{ BOOKING_HISTORIES : has
+
     USERS {
-        int id PK
+        int id
         string name
-        string email unique
+        string email
         string password
         string role
-        datetime created_at
-        datetime updated_at
     }
     
     VEHICLES {
-        int id PK
+        int id
         string name
         string type
         boolean is_company_owned
         float fuel_consumption
-        date last_service_date nullable
-        datetime created_at
-        datetime updated_at
+        date last_service_date
     }
     
     BOOKINGS {
-        int id PK
-        int vehicle_id FK
+        int id
+        int vehicle_id
         string requested_by
-        int approver_level_1 nullable
+        int approver_level_1
         string status_level_1
-        int approver_level_2 nullable
+        int approver_level_2
         string status_level_2
         date start_date
         date end_date
         text reason
-        datetime created_at
-        datetime updated_at
     }
     
     LOGS {
-        int id PK
-        int user_id FK
+        int id
+        int user_id
         string action
-        datetime created_at
-        datetime updated_at
     }
     
     BOOKING_HISTORIES {
-        int id PK
-        int vehicle_id FK
-        int booking_id FK
+        int id
+        int vehicle_id
+        int booking_id
         int duration
-        datetime created_at
-        datetime updated_at
     }
-    
-    USERS ||--o{ BOOKINGS : "creates"
-    USERS ||--o{ LOGS : "performs"
-    USERS ||--o{ BOOKINGS : "approves"
-    VEHICLES ||--o{ BOOKINGS : "is booked"
-    BOOKINGS ||--o{ BOOKING_HISTORIES : "has"
+
 ```
 
 
