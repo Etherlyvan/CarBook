@@ -11,7 +11,7 @@ erDiagram
         string name
         string email unique
         string password
-        enum role ['admin', 'approver']
+        string role
         timestamps
     }
     
@@ -29,10 +29,10 @@ erDiagram
         int id PK
         int vehicle_id FK
         string requested_by
-        int approver_level_1 FK nullable
-        string status_level_1 default 'pending'
-        int approver_level_2 FK nullable
-        string status_level_2 default 'pending'
+        int approver_level_1 nullable
+        string status_level_1
+        int approver_level_2 nullable
+        string status_level_2
         date start_date
         date end_date
         text reason
