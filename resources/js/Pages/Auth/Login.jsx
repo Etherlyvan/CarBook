@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        Inertia.post('/login', formData, {
+        router.post('/login', formData, {
             onError: (errors) => {
                 setErrors(errors);
             },

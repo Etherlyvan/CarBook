@@ -1,12 +1,12 @@
 import React from 'react';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';
 import PropTypes from 'prop-types'; // Mengimpor PropTypes
 import AppLayout from '../Layout/AppLayout';
 
 const Index = ({ bookings }) => {
     const handleDelete = (id) => {
         if (confirm('Are you sure you want to delete this booking?')) {
-            Inertia.delete(`/bookings/${id}`);
+            router.delete(`/bookings/${id}`);
         }
     };
 
@@ -15,7 +15,7 @@ const Index = ({ bookings }) => {
             <h1 className="text-2xl font-bold">Bookings</h1>
             <div className="mt-4">
                 <button
-                    onClick={() => Inertia.visit('/bookings/create')}
+                    onClick={() => router.visit('/bookings/create')}
                     className="bg-green-500 text-white px-4 py-2 rounded mb-4"
                 >
                     Create Booking
@@ -41,7 +41,7 @@ const Index = ({ bookings }) => {
                                     <button onClick={() => handleDelete(booking.id)} className="text-red-500">
                                         Delete
                                     </button>
-                                    <button onClick={() => Inertia.visit(`/bookings/${booking.id}/edit`)} className="text-blue-500 ml-2">
+                                    <button onClick={() => router.visit(`/bookings/${booking.id}/edit`)} className="text-blue-500 ml-2">
                                         Edit
                                     </button>
                                 </td>

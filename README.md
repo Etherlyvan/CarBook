@@ -1,306 +1,117 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-#CarBook
+# CarBook
 
-## Physical Data Model
+CarBook is an internal vehicle booking application. Administrators request company vehicles and route each request through two approvers.
 
-```mermaid
-erDiagram
-    USERS ||--o{ BOOKINGS : creates
-    USERS ||--o{ LOGS : performs
-    USERS ||--o{ BOOKINGS : approves
-    VEHICLES ||--o{ BOOKINGS : "is booked"
-    BOOKINGS ||--o{ BOOKING_HISTORIES : has
+## Features
 
-    USERS {
-        int id
-        string name
-        string email
-        string password
-        string role
-    }
-    
-    VEHICLES {
-        int id
-        string name
-        string type
-        boolean is_company_owned
-        float fuel_consumption
-        date last_service_date
-    }
-    
-    BOOKINGS {
-        int id
-        int vehicle_id
-        string requested_by
-        int approver_level_1
-        string status_level_1
-        int approver_level_2
-        string status_level_2
-        date start_date
-        date end_date
-        text reason
-    }
-    
-    LOGS {
-        int id
-        int user_id
-        string action
-    }
-    
-    BOOKING_HISTORIES {
-        int id
-        int vehicle_id
-        int booking_id
-        int duration
-    }
+- Browse vehicles and submit bookings with a date range and reason.
+- Assign two approvers to each booking.
+- Approve or reject requests at either approval stage.
+- Review booking history and vehicle service dates.
+- Record booking activity in the application log.
 
-```
+## Stack
 
+- Laravel 11 and PHP 8.2
+- PostgreSQL 16
+- Blade templates and React/Inertia pages, built with Vite
+- Docker Compose
 
-## Activity Diagram for Vehicle Booking
+## Local setup
 
-```mermaid
-graph TD;
-    A[Start] --> B[Admin Login]
-    B --> C[Display Booking Form]
-    C --> D[Admin Fills Booking Form]
-    D --> E[Save Booking Request]
-    E --> F[Notify Approver Level 1]
-    F --> G[Approver Level 1 Reviews Request]
-    G --> H{Approve/Reject Request}
-    H -->|Approve| I[Notify Approver Level 2]
-    H -->|Reject| J[Update Booking Status to Rejected]
-    I --> K[Approver Level 2 Reviews Request]
-    K --> L{Approve/Reject Request}
-    L -->|Approve| M[Update Booking Status to Approved]
-    L -->|Reject| N[Update Booking Status to Rejected]
-    M --> O[Notify Admin]
-    N --> O[Notify Admin]
-    O --> P[End]
-```
-## System Requirements
-- PHP Version: 8.2.12
-- Database: pgsql 
-- Framework: Laravel 11.36.1
+You need Docker Engine and the Docker Compose plugin. The development Compose file adds a local PostgreSQL database; the base Compose file runs only the web application and is suitable for connecting to an existing database.
 
-## Access Credentials
+1. Create your local environment file:
 
-
-### Development Environment
-```txt
-URL: http://localhost:8000
-```
-
-| Role    | Username          | Password    |
-|---------|------------------|-------------|
-| admin   | admin@example.com | password   |
-| approver   | approver@example.com  | password   |
-| approver   | approver2@example.com  | password   |
-
-### Database Configuration
-using supabase 
-```txt
-DB_CONNECTION=pgsql
-DB_HOST=ursupabasehost
-DB_PORT=0000
-DB_DATABASE=postgres
-DB_USERNAME=postgres.usernamecode 
-DB_PASSWORD=dbpassword
-```
-
-## Installation Guide
-
-1. **Clone Repository**
-```bash
-git clone https://github.com/Etherlyvan/CarBook.git
-```
-
-2. **Install Dependencies**
-```bash
-composer install
-npm install
-```
-
-3. **Environment Setup**
-```bash
-cp .env.example .env
-php artisan key:generate
-```
-
-4. **Database Setup**
-```bash
-php artisan migrate
-php artisan db:seed
-```
-
-5. **Start Development Server**
-```bash
-php artisan serve
-npm run dev
-```
-
-## Application Features
-
-### Admin Panel
-1. Dashboard
-   - View statistics
-   - Monitor activities
-   - Generate reports
-
-2. Booking Management
-   - Create/Delete Booking
-   - Assign Approver
-
-
-3. History
-   - See Recent Approval 
-
-### Approver Panel
-1. Booking Approve
-   - Booking Approval
-   - Booking Rejection
-
-## API Documentation
-
-### Authentication
-```txt
-Endpoint: /api/login
-Method: POST
-Headers: Accept: application/json
-```
-
-Example request:
-```json
-{
-    "email": "user@email.com",
-    "password": "password123"
-}
-```
-
-## Troubleshooting
-
-### Common Issues
-1. **Installation Error**
    ```bash
-   composer install --ignore-platform-reqs
+   cp .env.example .env
    ```
 
-2. **Database Connection Error**
-   - Check database credentials
-   - Ensure database service is running
+   In PowerShell, use `Copy-Item .env.example .env`.
 
-3. **Permission Issues**
+2. Build and start the app with its local database:
+
    ```bash
-   chmod -R 775 storage bootstrap/cache
+   docker compose -f compose.yaml -f compose.dev.yaml up --build -d
    ```
 
-## Deployment Guide
+3. Generate an application key, then create and seed the database:
 
-1. **Production Server Setup**
+   ```bash
+   docker compose -f compose.yaml -f compose.dev.yaml exec app php artisan key:generate
+   docker compose -f compose.yaml -f compose.dev.yaml exec app php artisan migrate --seed
+   ```
+
+4. Open [http://localhost:8080](http://localhost:8080).
+
+The app and local database have memory and CPU limits defined in `.env`. The database data is stored in a named Docker volume. Stop the services with:
+
 ```bash
-composer install --optimize-autoloader --no-dev
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+docker compose -f compose.yaml -f compose.dev.yaml down
 ```
 
-2. **Environment Configuration**
-   - Update .env for production
-   - Set APP_ENV=production
-   - Set APP_DEBUG=false
+### Local demo accounts
 
-## Updates and Maintenance
+The database seeder creates the following development accounts. All three use the password `password`.
 
-### Version History
-- v1.0.0 (2024-01-01)
-  - Initial release
-  - Basic features implemented
+| Role | Email |
+| --- | --- |
+| Admin | `admin@example.com` |
+| Approver | `approver@example.com` |
+| Approver | `approver2@example.com` |
 
-- v1.1.0 (2024-02-01)
-  - Added new features
-  - Bug fixes
+These accounts are for local evaluation only. Change or remove them before using seeded data in any shared environment.
 
-### Backup Procedure
-1. Database Backup
+## VPS deployment notes
+
+The base `compose.yaml` starts only CarBook and binds its port to `127.0.0.1`. On a VPS, point it at an existing PostgreSQL service and place a host-level Nginx, Caddy, or other reverse proxy in front of the configured `APP_PORT`. This lets several small sites share one reverse proxy and database server without running a separate database container for every project.
+
+Set `APP_ENV=production`, `APP_DEBUG=false`, the public `APP_URL`, a unique `APP_KEY`, and strong database credentials in `.env`. After building and starting the app, run migrations and refresh Laravel's compiled configuration and views:
+
 ```bash
-php artisan backup:run
+docker compose up --build -d
+docker compose exec app php artisan migrate --force
+docker compose exec app php artisan config:cache
+docker compose exec app php artisan view:cache
 ```
 
-2. File Backup
+Run `config:cache` again after changing environment settings. The app container has a 384 MB memory limit and a 0.50 CPU limit by default; tune `APP_MEMORY_LIMIT` and `APP_CPU_LIMIT` to match the VPS and expected traffic. Apache is capped at six PHP workers and PHP uses a 128 MB memory limit. Raise these limits only if the workload needs them.
+
+Application logs go to the container output and Docker rotates them at 10 MB, retaining three files. Use `docker compose logs -f app` to inspect recent logs. The application image contains PHP extensions, Composer dependencies, and prebuilt frontend assets; Node.js, npm, Composer, and build libraries stay in intermediate image stages. Rebuild the image after changing application code or dependencies because OPcache assumes immutable code inside the image.
+
+Do not commit `.env` or production credentials. The Compose setup is a small single-host deployment pattern; it does not configure TLS, backups, monitoring, or a production database.
+
+## Common commands
+
+For local development, include both Compose files in each command:
+
 ```bash
-# Backup storage directory
-tar -czf backup.tar.gz storage/
+# Follow app logs
+docker compose -f compose.yaml -f compose.dev.yaml logs -f app
+
+# Run migrations
+docker compose -f compose.yaml -f compose.dev.yaml exec app php artisan migrate
+
+# Rebuild after changing app code or dependencies
+docker compose -f compose.yaml -f compose.dev.yaml up --build -d
 ```
 
-## Support Contact
+To delete the local database and start over, run `docker compose -f compose.yaml -f compose.dev.yaml down --volumes`. This permanently removes the local database volume.
 
-- Technical Support: support@email.com
-- Emergency Contact: +62 123 4567 890
-- Working Hours: Monday-Friday (9:00-17:00 WIB)
+## Repository layout
 
-## License
-This application is licensed under the [MIT License](LICENSE).
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```text
+app/                 Controllers, models, and application services
+database/            Migrations, factories, and seeders
+resources/views/     Blade templates
+resources/js/        React/Inertia pages and entry point
+routes/              Web and console routes
+docker/              PHP and Apache runtime tuning
+Dockerfile           Multi-stage application image build
+compose.yaml         App service for local use or VPS deployment
+compose.dev.yaml     Optional local PostgreSQL service
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+No license has been specified for this repository. Contact the maintainers before redistributing or reusing the code.

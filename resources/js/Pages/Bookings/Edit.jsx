@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';
 import PropTypes from 'prop-types'; // Mengimpor PropTypes
 import AppLayout from '../Layout/AppLayout';
 
@@ -23,7 +23,7 @@ const Edit = ({ booking }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        Inertia.put(`/bookings/${booking.id}`, formData, {
+        router.put(`/bookings/${booking.id}`, formData, {
             onError: (errors) => {
                 setErrors(errors);
             },

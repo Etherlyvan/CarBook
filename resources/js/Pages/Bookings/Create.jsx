@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';
 import AppLayout from '../Layout/AppLayout';
 
 const Create = () => {
@@ -22,7 +22,7 @@ const Create = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        Inertia.post('/bookings', formData, {
+        router.post('/bookings', formData, {
             onError: (errors) => {
                 setErrors(errors);
             },

@@ -1,8 +1,8 @@
 import axios from 'axios';
 window.axios = axios;
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';
 
 // Pengaturan untuk Inertia
-window.Inertia = Inertia;
+window.Inertia = router;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
