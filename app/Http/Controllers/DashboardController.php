@@ -8,6 +8,6 @@ class DashboardController extends Controller
     public function index()
     {
         // Retrieve necessary data for dashboard
-        return view('Dashboard');
+        return view('dashboard');
     }
 }

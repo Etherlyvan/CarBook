@@ -4,7 +4,6 @@
 .vscode
 .env
 .env.*
-!.env.example
 node_modules
 vendor
 public/build

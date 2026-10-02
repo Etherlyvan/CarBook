@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\BookingHistory;
 use App\Http\Requests\BookingRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Observers\LogObserver;
 use Illuminate\Support\Facades\Log;
 
@@ -61,7 +60,7 @@ class BookingController extends Controller
     public function edit(Booking $booking)
     {
         $vehicles = Vehicle::all();
-        $users = User::all();
+        $users = User::where('role', 'approver')->get();
         return view('bookings.edit', compact('booking', 'vehicles', 'users'));
     }
 
@@ -82,6 +81,11 @@ class BookingController extends Controller
 
     public function approveLevel1(Request $request, Booking $booking)
     {
+        abort_unless(
+            $booking->approver_level_1 === $request->user()->id && $booking->status_level_1 === 'pending',
+            403,
+        );
+
         $booking->status_level_1 = 'approved'; // Atur status Level 1 menjadi disetujui
         $booking->approver_level_1 = $request->user()->id; // Simpan ID approver Level 1
         $booking->save();
@@ -92,9 +96,13 @@ class BookingController extends Controller
         return redirect()->route('bookings.approver')->with('success', 'Booking telah disetujui oleh Level 1.');
     }
     
-    public function rejectLevel1($id)
+    public function rejectLevel1(Request $request, Booking $booking)
     {
-        $booking = Booking::findOrFail($id);
+        abort_unless(
+            $booking->approver_level_1 === $request->user()->id && $booking->status_level_1 === 'pending',
+            403,
+        );
+
         $booking->status_level_1 = 'rejected'; // Tolak level 1
         $booking->save();
 
@@ -105,19 +113,18 @@ class BookingController extends Controller
         return redirect()->route('bookings.approver')->with('success', 'Booking ditolak oleh Level 1.');
     }
     
-    public function approveLevel2($id)
+    public function approveLevel2(Request $request, Booking $booking)
     {
-        // Pastikan pengguna terautentikasi
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Anda harus login untuk melakukan aksi ini.');
-        }
-
-        // Temukan booking berdasarkan ID
-        $booking = Booking::findOrFail($id);
+        abort_unless(
+            $booking->approver_level_2 === $request->user()->id
+                && $booking->status_level_1 === 'approved'
+                && $booking->status_level_2 === 'pending',
+            403,
+        );
         
         // Setujui level 2
         $booking->status_level_2 = 'approved';
-        $booking->approver_level_2 = Auth::user()->id; // Simpan ID approver Level 2
+        $booking->approver_level_2 = $request->user()->id; // Simpan ID approver Level 2
         $booking->save();
 
         $logObserver = new LogObserver();
@@ -130,9 +137,14 @@ class BookingController extends Controller
 
         return redirect()->route('bookings.approver')->with('success', 'Booking telah disetujui oleh Level 2.');
     }
-    public function rejectLevel2($id)
+    public function rejectLevel2(Request $request, Booking $booking)
     {
-        $booking = Booking::findOrFail($id);
+        abort_unless(
+            $booking->approver_level_2 === $request->user()->id
+                && $booking->status_level_1 === 'approved'
+                && $booking->status_level_2 === 'pending',
+            403,
+        );
         $booking->status_level_2 = 'rejected'; // Tolak level 2
         $booking->save();
         

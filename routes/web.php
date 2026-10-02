@@ -6,13 +6,20 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\CheckRole;
+
+Route::get('/', function () {
+    return auth()->check()
+        ? redirect()->route('dashboard')
+        : redirect()->route('login');
+})->name('home');
+
+Route::view('/guide', 'guide')->name('guide');
 
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {

@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Vehicle;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use RuntimeException;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +12,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        if (! app()->environment('local', 'testing')) {
+            throw new RuntimeException('Demo data can only be seeded in local or testing environments.');
+        }
 
         $this->call([
             UserSeeder::class,

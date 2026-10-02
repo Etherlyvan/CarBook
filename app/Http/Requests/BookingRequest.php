@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BookingRequest extends FormRequest
 {
@@ -16,8 +17,8 @@ class BookingRequest extends FormRequest
         return [
             'vehicle_id' => 'required|exists:vehicles,id',
             'requested_by' => 'required|string|max:255',
-            'approver_level_1' => 'required|exists:users,id',
-            'approver_level_2' => 'required|exists:users,id|different:approver_level_1',
+            'approver_level_1' => ['required', Rule::exists('users', 'id')->where('role', 'approver')],
+            'approver_level_2' => ['required', Rule::exists('users', 'id')->where('role', 'approver'), 'different:approver_level_1'],
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|string|max:255',

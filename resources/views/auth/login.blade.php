@@ -28,7 +28,11 @@
 </head>
 <body class="d-flex align-items-center justify-content-center">
     <div class="login-container">
+        <p class="text-center text-muted mb-2">CarBook</p>
         <h1 class="text-center">Login</h1>
+        @if (session('error'))
+            <div class="alert alert-warning" role="alert">{{ session('error') }}</div>
+        @endif
         <form action="{{ route('login') }}" method="POST">
             @csrf
             <div class="form-group">
@@ -50,6 +54,7 @@
                 </ul>
             </div>
         @endif
+        <p class="text-center mt-3 mb-0"><a href="{{ route('guide') }}">View the demo guide</a></p>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
