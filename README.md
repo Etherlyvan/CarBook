@@ -49,6 +49,8 @@ Open [http://localhost:8080/guide](http://localhost:8080/guide) for the in-app w
 
 The app and local database have memory and CPU limits defined in `.env`. The database data is stored in a named Docker volume. Stop the services with:
 
+The development database is forwarded to `127.0.0.1:55432` by default to avoid the common PostgreSQL host port. Change `DB_FORWARD_PORT` in `.env` if that port is already in use. The app connects to the database over the private Compose network.
+
 ```bash
 docker compose -f compose.yaml -f compose.dev.yaml down
 ```

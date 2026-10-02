@@ -17,7 +17,7 @@ services:
       POSTGRES_USER: ${DB_USERNAME:-carbook}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-carbook}
     ports:
-      - "127.0.0.1:${DB_FORWARD_PORT:-5432}:5432"
+      - "127.0.0.1:${DB_FORWARD_PORT:-55432}:5432"
     mem_limit: ${DB_MEMORY_LIMIT:-256m}
     cpus: ${DB_CPU_LIMIT:-0.50}
     volumes:

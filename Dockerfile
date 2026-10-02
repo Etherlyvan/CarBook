@@ -43,9 +43,9 @@ RUN apt-get update \
         libfreetype6 \
         libjpeg62-turbo \
         libonig5 \
-        libpng16-16 \
+        libpng16-16t64 \
         libpq5 \
-        libzip4 \
+        libzip5 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=php-build /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
